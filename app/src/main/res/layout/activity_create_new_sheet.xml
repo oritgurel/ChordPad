@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="@dimen/default_page_margin"
+    android:layout_marginTop="@dimen/create_sheet_activity_top_margin"
+    tools:context="com.oritmalki.mymusicapp2.ui.mainscreen.CreateNewSheetActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cs_activity_sheet_title_et_wrapper"
+        style="@style/CsEditTextField"
+        android:hint="@string/activity_create_new_sheet_title_tv"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/cs_activity_sheet_title_et"
+        style="@style/CsEditTextField"
+        android:text="@string/cs_activity_default_title_et"
+        app:layout_constraintStart_toEndOf="@id/cs_activity_sheet_title_tv"
+        app:layout_constraintBaseline_toBaselineOf="@+id/cs_activity_sheet_title_tv"
+        />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cs_activity_sheet_author_et_wrapper"
+        style="@style/CsEditTextField"
+        android:layout_marginTop="@dimen/create_sheet_textview_margin"
+        android:hint="@string/cs_activity_sheet_author_hint"
+        app:layout_constraintTop_toBottomOf="@id/cs_activity_sheet_title_et_wrapper">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/cs_activity_sheet_author_et"
+            style="@style/CsEditTextField"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/cs_timesig_title"
+        style="@style/CsTextViewTitle"
+        android:layout_marginTop="@dimen/create_sheet_activity_top_margin"
+        android:text="@string/cs_activity_timesig_title"
+        app:layout_constraintTop_toBottomOf="@id/cs_activity_sheet_author_et_wrapper"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cs_activity_timesig_num_et_wrapper"
+        style="@style/CsEditTextField"
+        android:layout_marginTop="@dimen/create_sheet_textview_margin"
+        android:hint="@string/cs_activity_numerator_hint"
+        app:layout_constraintTop_toBottomOf="@id/cs_timesig_title">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/cs_activity_sheet_timesig_num_et"
+            style="@style/CsEditTextField"
+            android:inputType="number"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cs_activity_timesig_denom_et_wrapper"
+        style="@style/CsEditTextField"
+        android:layout_marginTop="@dimen/create_sheet_textview_margin"
+        android:hint="@string/cs_activity_timesig_denom_hint"
+        app:layout_constraintTop_toBottomOf="@id/cs_activity_timesig_num_et_wrapper">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/cs_activity_sheet_denom_num_et"
+            style="@style/CsEditTextField"
+            android:inputType="number"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/cs_activity_number_of_measures_et_wrapper"
+        style="@style/CsEditTextField"
+        android:layout_marginTop="@dimen/create_sheet_activity_top_margin"
+        android:hint="@string/cs_activity_number_of_measures_hint"
+        app:layout_constraintTop_toBottomOf="@id/cs_activity_timesig_denom_et_wrapper">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/cs_activity_number_of_measures_et"
+            style="@style/CsEditTextField"
+            android:inputType="number"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/cs_create_sheet_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@color/preference_fallback_accent_color"
+        android:layout_marginTop="@dimen/create_sheet_activity_top_margin"
+        app:layout_constraintTop_toBottomOf="@+id/cs_activity_number_of_measures_et_wrapper"/>
+
+
+</android.support.constraint.ConstraintLayout>

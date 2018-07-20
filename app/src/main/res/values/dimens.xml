@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_large">22sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_medium_plus">18sp</dimen>
+    <dimen name="default_page_margin">20dp</dimen>
+    <!--Create Sheet Activity-->
+    <dimen name="create_sheet_activity_top_margin">35dp</dimen>
+    <dimen name="create_sheet_activity_tv_end_margin">5dp</dimen>
+    <dimen name="create_sheet_edittext_width">200dp</dimen>
+    <dimen name="create_sheet_textview_margin">8dp</dimen>
+
+</resources>

@@ -1,0 +1,151 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "267a4d0d668c261f132d099f34164fbf",
+    "entities": [
+      {
+        "tableName": "Sheet",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `title` TEXT, `author` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author",
+            "columnName": "author",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "measure",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sheet_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `measure_number` INTEGER, `time_signature` TEXT, `showTimeSig` INTEGER NOT NULL, `beats` TEXT, `numerator` INTEGER, `denominator` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "sheetId",
+            "columnName": "sheet_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "measureNumber",
+            "columnName": "measure_number",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeSig",
+            "columnName": "time_signature",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "showTimeSig",
+            "columnName": "showTimeSig",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "beats",
+            "columnName": "beats",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeSignature.numerator",
+            "columnName": "numerator",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "timeSignature.denominator",
+            "columnName": "denominator",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_measure_id",
+            "unique": false,
+            "columnNames": [
+              "id"
+            ],
+            "createSql": "CREATE  INDEX `index_measure_id` ON `${TABLE_NAME}` (`id`)"
+          },
+          {
+            "name": "index_measure_measure_number_beats",
+            "unique": false,
+            "columnNames": [
+              "measure_number",
+              "beats"
+            ],
+            "createSql": "CREATE  INDEX `index_measure_measure_number_beats` ON `${TABLE_NAME}` (`measure_number`, `beats`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "beat",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chord_name` TEXT NOT NULL, `measureNum` INTEGER, PRIMARY KEY(`chord_name`))",
+        "fields": [
+          {
+            "fieldPath": "chordName",
+            "columnName": "chord_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "measureNum",
+            "columnName": "measureNum",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "chord_name"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"267a4d0d668c261f132d099f34164fbf\")"
+    ]
+  }
+}

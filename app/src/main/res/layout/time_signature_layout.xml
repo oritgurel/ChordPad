@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/time_signature"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingRight="3dp"
+    android:orientation="vertical">
+        <TextView
+            android:id="@+id/numerator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3"
+            android:layout_marginBottom="-5dp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/denominator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="4"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+

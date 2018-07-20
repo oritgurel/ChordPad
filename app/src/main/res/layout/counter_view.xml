@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@id/next_beat_butt"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/measure_num_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_toRightOf="@id/next_beat_butt"
+        android:paddingLeft="5dp"
+        android:paddingVertical="16dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="M: "
+        />
+
+    <TextView
+        android:id="@+id/beat_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_toRightOf="@id/measure_num_tv"
+        android:padding="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:text="B:"/>
+</LinearLayout>
