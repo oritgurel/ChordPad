@@ -9,5 +9,9 @@
     <dimen name="create_sheet_activity_tv_end_margin">5dp</dimen>
     <dimen name="create_sheet_edittext_width">200dp</dimen>
     <dimen name="create_sheet_textview_margin">8dp</dimen>
+    <dimen name="si_screen_padding">50dp</dimen>
+    <dimen name="si_login_btn_margin_top">24dp</dimen>
+    <dimen name="si_default_padding_horz">16dp</dimen>
+    <dimen name="btn_default_corner_radius">5dp</dimen>
 
 </resources>

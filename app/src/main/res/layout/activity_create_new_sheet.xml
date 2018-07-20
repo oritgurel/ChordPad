@@ -89,13 +89,8 @@
 
     <Button
         android:id="@+id/cs_create_sheet_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:background="@color/preference_fallback_accent_color"
-        android:layout_marginTop="@dimen/create_sheet_activity_top_margin"
+        android:text="@string/cns_create_btn"
+        style="@style/SubmitBtn"
         app:layout_constraintTop_toBottomOf="@+id/cs_activity_number_of_measures_et_wrapper"/>
 
 
