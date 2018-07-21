@@ -33,6 +33,8 @@ public class SharedSheetsFragment extends android.support.v4.app.ListFragment {
         sharedSheets.addAll(sheets);
     }
 
+    //TODO set the data to be a reading from firebase of the sheets that were shared with this user.
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

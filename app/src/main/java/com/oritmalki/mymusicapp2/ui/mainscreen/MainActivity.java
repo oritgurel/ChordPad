@@ -5,6 +5,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,10 +25,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
@@ -38,6 +43,7 @@ import com.oritmalki.mymusicapp2.R;
 import com.oritmalki.mymusicapp2.database.MeasureRepository;
 import com.oritmalki.mymusicapp2.firebase.AuthManager;
 import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
+import com.oritmalki.mymusicapp2.firebase.IFbDatabase;
 import com.oritmalki.mymusicapp2.model.Beat;
 import com.oritmalki.mymusicapp2.model.Measure;
 import com.oritmalki.mymusicapp2.ui.mainscreen.EditFragment.OnFragmentInteractionListener;
@@ -123,15 +129,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         final MeasureListViewModel measureListViewModel = ViewModelProviders.of(this).get(MeasureListViewModel.class);
         this.viewModel = measureListViewModel;
 
-
-
         final SheetListViewModel sheetListViewModel = ViewModelProviders.of(this).get(SheetListViewModel.class);
-
         initializeViews(measureListViewModel);
-
         observeViewModel(measureListViewModel, sheetListViewModel);
-
-
         setupActionbar();
 
     }
@@ -147,8 +147,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         counterView = getLayoutInflater().inflate(R.layout.counter_view, null);
         actionBar.setCustomView(counterView);
-
-
 
 
         TextView titleTV = findViewById(R.id.sheet_title_tv);
@@ -177,12 +175,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             public void onChanged(@Nullable List<Measure> measures) {
                 if (measures != null && measures.size() != 0) {
 
-                                  if (measuresAdapter == null) {
+                    if (measuresAdapter == null) {
 
-                                      measuresAdapter = new MeasuresAdapter(getApplicationContext(), beatClickCallback);
-                                      recyclerView.setAdapter(measuresAdapter);
-                                  }
-                                  measuresAdapter.setMeasuresList(measures, getApplicationContext());
+                        measuresAdapter = new MeasuresAdapter(getApplicationContext(), beatClickCallback);
+                        recyclerView.setAdapter(measuresAdapter);
+                    }
+                    measuresAdapter.setMeasuresList(measures, getApplicationContext());
 
 //                    recyclerView.smoothScrollToPosition(measures.size()-1);
                     Log.d("ADD_MEASURE", "updated view");
@@ -260,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         @Override
         public void onBeatClicked(Measure measure, View beatView, int beatPosition) {
-            recyclerView.scrollToPosition(measure.getNumber()-1);
+            recyclerView.scrollToPosition(measure.getNumber() - 1);
             appBarLayout.setExpanded(false);
             currentMeasure = measure;
             currentBeatPosition = beatPosition;
@@ -387,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         View nextBeatView;
         int measurePosition = currentMeasure.getNumber() - 1;
-       //if beat is in first measure
+        //if beat is in first measure
         if (measurePosition == -1) {
             measurePosition = 0;
         }
@@ -548,12 +546,69 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 finish();
                 return true;
             case R.id.share_sheet:
-                FbDatabaseManager.getInstance();
+                shareCurrentSheet();
+
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    public void shareCurrentSheet() {
 
+        final List<Measure> measuresToShare = viewModel.getMeasuresBySheet(getApplication()).getValue();
+
+        FbDatabaseManager.getInstance().saveMeasuresContentAndShare(measuresToShare, "pod@ka.com", new IFbDatabase() {
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onSuccess(String message) {
+                //dialoge to insert email of another user (assuming that user exists. TODO if user does not exist he'll recieve invitation to get the app)
+                showShareDialog(measuresToShare);
+            }
+        });
+
+        //save sheet content (measures) to fb, and send push notification to other user with payload to add the sheet to his sharedSheet fragment.
+    }
+
+    private void showShareDialog(List<Measure> measures) {
+        android.support.v7.app.AlertDialog.Builder shareDialog = new android.support.v7.app.AlertDialog.Builder(this);
+        shareDialog.setTitle("Share Your Chords");
+        EditText et = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        et.setLayoutParams(lp);
+        et.setHint("Enter other user's email");
+        shareDialog.setView(et);
+        shareDialog.setPositiveButton("Share", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String emailForSharing = et.getText().toString().trim();
+                if (TextUtils.isEmpty(emailForSharing)) {
+                    return;
+                }
+                FbDatabaseManager.getInstance().saveMeasuresContentAndShare(measures, emailForSharing, new IFbDatabase() {
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        //TODO send push to other user
+                        Toast.makeText(getApplicationContext(), "Successfully shared with " + message , Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+
+                    }
+                });
+            }
+        });
+
+        shareDialog.create();
+        shareDialog.show();
+
+    }
 }

@@ -11,6 +11,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,8 +48,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     TextView mNewExistingUserTv;
     @BindView(R.id.si_constraint_layout)
     ConstraintLayout mConstraintLayout;
+    @BindView(R.id.si_progress_bar)
+    ProgressBar mProgressbar;
 
-    private boolean mNewUserView;
+    private boolean mNewUserView = true;
     private String mEmail;
     private String mPassword;
     private String mConfirmPassword;
@@ -125,6 +128,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loginWithEmail() {
+        showProgressbar();
         mEmail = mEmailEt.getText().toString().trim();
         mPassword = mPasswordEt.getText().toString().trim();
         //TODO add fields validation
@@ -132,28 +136,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
+                    hideProgressbar();
                     showError(task.getException().getLocalizedMessage());
                     return;
                 }
-
-                FbDatabaseManager.getInstance().saveUserToFirebase(mAuth.getUid(), mEmail, new IFbDatabase() {
-                    @Override
-                    public void onError(String error) {
-                        showError(error);
-                    }
-
-                    @Override
-                    public void onSuccess(String message) {
-                        startActivity(SheetsActivity.getIntent(getApplicationContext()));
-                        showMessage(getString(R.string.si_login_successful_msg));
-                    }
-                });
             }
 
         });
     }
 
     private void createNewUser() {
+        showProgressbar();
         mEmail = mEmailEt.getText().toString().trim();
         mPassword = mPasswordEt.getText().toString().trim();
         mConfirmPassword = mConfirmPasswordEt.getText().toString().trim();
@@ -162,24 +155,44 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (!task.isSuccessful()) {
+                    hideProgressbar();
                     showError(task.getException().getLocalizedMessage());
                     return;
                 }
 
-                startActivity(SheetsActivity.getIntent(getApplicationContext()));
-                showMessage(getString(R.string.si_created_new_user_msg));
+                FbDatabaseManager.getInstance().saveUserToFirebase(mAuth.getUid(), mEmail, new IFbDatabase() {
+                    @Override
+                    public void onError(String error) {
+                        hideProgressbar();
+                        showError(error);
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        startActivity(SheetsActivity.getIntent(getApplicationContext()));
+                        showMessage(getString(R.string.si_created_new_user_msg));
+                    }
+                });
             }
         });
     }
 
     private void showError(String error) {
-
-       Snackbar.make(mConstraintLayout, error, Snackbar.LENGTH_LONG).show();
+       Snackbar snackbar = Snackbar.make(mConstraintLayout, error, Snackbar.LENGTH_LONG);
+       snackbar.show();
     }
 
     private void showMessage(String message) {
+        Snackbar snackbar = Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
 
-        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+    private void showProgressbar() {
+        mProgressbar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressbar() {
+        mProgressbar.setVisibility(View.GONE);
     }
 
 

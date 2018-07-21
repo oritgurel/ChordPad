@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="@dimen/si_screen_padding"
-    android:animateLayoutChanges="true"
-    android:id="@+id/si_constraint_layout"
-    tools:context=".ui.mainscreen.SignInActivity">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr">
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/si_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:paddingHorizontal="@dimen/si_screen_padding"
+        tools:context=".ui.mainscreen.SignInActivity">
 
     <ImageView
         android:id="@+id/si_logo_iv"
@@ -16,10 +24,10 @@
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
         android:src="@drawable/ic_011_sheet_music"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/si_email_et_wrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <android.support.design.widget.TextInputLayout
@@ -28,15 +36,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:hint="@string/si_email"
-        app:layout_constraintTop_toBottomOf="@id/si_logo_iv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/si_logo_iv">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/si_email_et"
+            style="@style/CsEditTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/CsEditTextField"
             />
     </android.support.design.widget.TextInputLayout>
 
@@ -45,15 +53,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/si_password"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/si_email_et_wrapper">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/si_password_et"
+            style="@style/CsEditTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/CsEditTextField"
             android:inputType="textPassword"
             />
     </android.support.design.widget.TextInputLayout>
@@ -63,15 +71,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/si_confirm_password"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/si_password_et_wrapper">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/si_confirm_password_et"
+            style="@style/CsEditTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/CsEditTextField"
             android:inputType="textPassword"
             />
     </android.support.design.widget.TextInputLayout>
@@ -79,24 +87,42 @@
     <Button
         android:id="@+id/si_login_btn"
         style="@style/SubmitBtn"
-        android:text="@string/si_create_new_account"
         android:paddingHorizontal="@dimen/si_default_padding_horz"
-        app:layout_constraintTop_toBottomOf="@id/si_confirm_password_et_wrapper"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/si_create_new_account"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/si_confirm_password_et_wrapper"
         />
 
     <TextView
         android:id="@+id/newExisting_user_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/si_login_btn_margin_top"
         android:layout_marginBottom="@dimen/si_login_btn_margin_top"
-        android:textStyle="bold"
+        android:layout_marginTop="@dimen/si_login_btn_margin_top"
         android:text="@string/si_already_have_an_account"
-        app:layout_constraintTop_toBottomOf="@id/si_login_btn"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/si_login_btn"/>
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp">
+
+        <ProgressBar
+            android:id="@+id/si_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/preference_fallback_accent_color"
+            android:scaleY="5"
+            android:visibility="gone"/>
+    </FrameLayout>
+</RelativeLayout>
+

@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Orit on 21.12.2017.
@@ -18,6 +19,11 @@ public class Sheet implements Serializable {
 
     public String title;
     public String author;
+
+    @Ignore //for firebase
+    private String userId;
+    @Ignore
+    private Map<String, String> userAccess;
 
 
 //    @Relation(parentColumn = "id", entityColumn = "measureNumber", entity = Measure.class)
@@ -65,6 +71,30 @@ public class Sheet implements Serializable {
 
     public void setMeasures(List<Measure> measures) {
         this.measures = measures;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Map<String, String> getUserAccess() {
+        return userAccess;
+    }
+
+    public void setUserAccess(Map<String, String> userAccess) {
+        this.userAccess = userAccess;
+    }
+
+    @Ignore
+    public Sheet(Long id, String title, String author, String userId) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.userId = userId;
     }
 
     @Ignore

@@ -7,6 +7,9 @@ import android.arch.lifecycle.MediatorLiveData;
 
 import com.oritmalki.mymusicapp2.BasicApp;
 import com.oritmalki.mymusicapp2.database.ISheetId;
+import com.oritmalki.mymusicapp2.firebase.AuthManager;
+import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
+import com.oritmalki.mymusicapp2.firebase.IFbDatabase;
 import com.oritmalki.mymusicapp2.model.Beat;
 import com.oritmalki.mymusicapp2.model.Measure;
 import com.oritmalki.mymusicapp2.model.Sheet;
@@ -57,8 +60,8 @@ public class SheetListViewModel extends AndroidViewModel {
 
     public void createNewSheet(Application application, int numOfMeasures, TimeSignature timeSig, String title, String author, ISheetId listener) {
 
-
         ((BasicApp) application).getSheetRepository().addNewSheet(new Sheet(title, author), new ISheetId() {
+
             @Override
             public void onIdRecieved(long id) {
                 long sheetId = id;
@@ -80,6 +83,20 @@ public class SheetListViewModel extends AndroidViewModel {
 //        ((BasicApp) application).getMeasureRepository().deleteAllMeasures();
                 //save measures
                 ((BasicApp) application).getMeasureRepository().saveMeasures(defaultMeasureList);
+
+                //save sheet to firebase
+                Sheet sheet = new Sheet(id, title, author, AuthManager.getFirebaseAuth().getUid());
+                FbDatabaseManager.getInstance().saveSheetToFirebase(sheet, new IFbDatabase() {
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                    @Override
+                    public void onSuccess(String message) {
+
+                    }
+                });
+
 
             }
         });

@@ -61,6 +61,7 @@ public class CreateNewSheetActivity extends AppCompatActivity {
         String title = sheetTitleEt.getText().toString().trim();
         String author = sheetAuthorEt.getText().toString().trim();
 
+        //save to room
         mSheetListViewModel.createNewSheet(getApplication(), Integer.valueOf(numberOfMeasuresEt.getText().toString().trim()) + 1,
                 new TimeSignature(Integer.valueOf(timeSigNum.getText().toString().trim()), Integer.valueOf(timeSigDenom.getText().toString().trim())), title, author
                 , new ISheetId() {
