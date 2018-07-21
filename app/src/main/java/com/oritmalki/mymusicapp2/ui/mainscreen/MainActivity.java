@@ -582,6 +582,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         et.setLayoutParams(lp);
         et.setHint("Enter other user's email");
         shareDialog.setView(et);
+        shareDialog.setCancelable(true);
         shareDialog.setPositiveButton("Share", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

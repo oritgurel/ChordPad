@@ -140,6 +140,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     showError(task.getException().getLocalizedMessage());
                     return;
                 }
+
+                startActivity(SheetsActivity.getIntent(getApplicationContext()));
+                hideProgressbar();
             }
 
         });
