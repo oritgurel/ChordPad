@@ -79,7 +79,7 @@
     <Button
         android:id="@+id/si_login_btn"
         style="@style/SubmitBtn"
-        android:text="@string/si_login_btn_text"
+        android:text="@string/si_create_new_account"
         android:paddingHorizontal="@dimen/si_default_padding_horz"
         app:layout_constraintTop_toBottomOf="@id/si_confirm_password_et_wrapper"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +93,7 @@
         android:layout_marginTop="@dimen/si_login_btn_margin_top"
         android:layout_marginBottom="@dimen/si_login_btn_margin_top"
         android:textStyle="bold"
-        android:text="@string/si_new_user_prompt_text"
+        android:text="@string/si_already_have_an_account"
         app:layout_constraintTop_toBottomOf="@id/si_login_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

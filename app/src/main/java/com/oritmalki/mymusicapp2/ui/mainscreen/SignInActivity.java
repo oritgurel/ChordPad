@@ -1,5 +1,7 @@
 package com.oritmalki.mymusicapp2.ui.mainscreen;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -17,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.oritmalki.mymusicapp2.R;
 import com.oritmalki.mymusicapp2.firebase.AuthManager;
+import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
+import com.oritmalki.mymusicapp2.firebase.IFbDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +52,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private String mEmail;
     private String mPassword;
     private String mConfirmPassword;
+
+    public static Intent getIntent(Context context) {
+        Intent intent = new Intent(context, SignInActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +99,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.newExisting_user_tv:
                 if (!mNewUserView) {
                     showNewUserView();
+                    return;
                 } else {
                     showExistingUserView();
                 }
@@ -101,16 +111,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void showNewUserView() {
         mNewExistingUserTv.setText(R.string.si_already_have_an_account);
         mLoginBtn.setText(R.string.si_create_new_account);
-        mConfirmPasswordEtWrapper.setVisibility(View.GONE);
-        mConfirmPasswordEt.setVisibility(View.GONE);
+        mConfirmPasswordEtWrapper.setVisibility(View.VISIBLE);
+        mConfirmPasswordEt.setVisibility(View.VISIBLE);
         mNewUserView = true;
     }
 
     private void showExistingUserView() {
         mNewExistingUserTv.setText(getString(R.string.si_new_user_prompt_text));
         mLoginBtn.setText(getString(R.string.si_login_btn_text));
-        mConfirmPasswordEtWrapper.setVisibility(View.VISIBLE);
-        mConfirmPasswordEt.setVisibility(View.VISIBLE);
+        mConfirmPasswordEtWrapper.setVisibility(View.GONE);
+        mConfirmPasswordEt.setVisibility(View.GONE);
         mNewUserView = false;
     }
 
@@ -126,8 +136,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
 
-                startActivity(SheetsActivity.getIntent(getApplicationContext()));
-                showMessage(getString(R.string.si_login_successful_msg));
+                FbDatabaseManager.getInstance().saveUserToFirebase(mAuth.getUid(), mEmail, new IFbDatabase() {
+                    @Override
+                    public void onError(String error) {
+                        showError(error);
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        startActivity(SheetsActivity.getIntent(getApplicationContext()));
+                        showMessage(getString(R.string.si_login_successful_msg));
+                    }
+                });
             }
 
         });

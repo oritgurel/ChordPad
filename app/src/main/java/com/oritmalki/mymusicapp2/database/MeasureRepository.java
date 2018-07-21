@@ -24,6 +24,7 @@ public class MeasureRepository {
     private final AppDataBase mDatabase;
     private MediatorLiveData<List<Measure>> mObservableMeasures;
     private MediatorLiveData<List<Measure>>  mObservableMeasuresBySheet;
+    private LiveData<List<Measure>> mMeasuresOfSheet;
     private MutableLiveData<List<Measure>> measuresBySheetMutable;
 
 
@@ -49,7 +50,8 @@ public class MeasureRepository {
 //
 //       observeMeasuresBySheet(measuresBySheetMutable, sheetId);
 
-
+//Here we are keeping this instance as class variable so we can remove it later from mObservableMeasuresBySheet source
+        mMeasuresOfSheet=mDatabase.measureDao().getMeasuresOfSheet(sheetId);
         mObservableMeasuresBySheet.addSource(mDatabase.measureDao().getMeasuresOfSheet(sheetId), new Observer<List<Measure>>() {
 
             @Override
@@ -85,9 +87,9 @@ public class MeasureRepository {
 
             }
         }
-        if (sInstance.getSheetId() != sheetId) {
-            sInstance = new MeasureRepository(database, sheetId);
-        }
+//        if (sInstance.getSheetId() != sheetId) {
+//            sInstance = new MeasureRepository(database, sheetId);
+//        }
         return sInstance;
     }
 
@@ -175,6 +177,23 @@ public class MeasureRepository {
 
     public void destroyDatabase() {
 
+    }
+
+    //Here we are updating the mObservableMeasuresBySheet with new source based on new sheetId
+    public void updateSheetId(long sheetId) {
+        if(mMeasuresOfSheet!=null) {
+            mObservableMeasuresBySheet.removeSource(mMeasuresOfSheet);
+        }
+        mMeasuresOfSheet=mDatabase.measureDao().getMeasuresOfSheet(sheetId);
+        mObservableMeasuresBySheet.addSource(mMeasuresOfSheet, new Observer<List<Measure>>() {
+            @Override
+            public void onChanged(@Nullable List<Measure> measuresBySheet) {
+                if (mDatabase.getDatabaseCreated().getValue() != null) {
+                    appExecutors.diskIO().execute(() ->
+                            mObservableMeasuresBySheet.postValue(measuresBySheet));
+                }
+            }
+        });
     }
 
     /*****Local App Memory DAO*****/

@@ -42,6 +42,8 @@ public class MeasureListViewModel extends AndroidViewModel {
         // observe the changes of the measures from the database and forward them
         mObservableMeasures.addSource(measures, mObservableMeasures::setValue);
 
+
+        ((BasicApp) application).getMeasureRepository().updateSheetId(((BasicApp) application).getSheetId());
         LiveData<List<Measure>> measuresBySheet = ((BasicApp) application).getMeasureRepository()
                 .getMeasuresBySheet();
 

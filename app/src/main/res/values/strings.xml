@@ -23,10 +23,11 @@
     <string name="si_password">Password</string>
     <string name="si_login_btn_text">Login</string>
     <string name="cns_create_btn">Create</string>
-    <string name="si_new_user_prompt_text">New user?</string>
+    <string name="si_new_user_prompt_text">New user</string>
     <string name="si_confirm_password">Confirm Password</string>
-    <string name="si_already_have_an_account">Already have an account</string>
+    <string name="si_already_have_an_account">Already have an account?</string>
     <string name="si_create_new_account">Create new account</string>
     <string name="si_created_new_user_msg">Created new user</string>
     <string name="si_login_successful_msg">Login successful</string>
+    <string name="action_bar_menu_sign_out">Sign Out</string>
 </resources>

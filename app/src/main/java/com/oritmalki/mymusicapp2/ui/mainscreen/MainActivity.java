@@ -17,6 +17,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +36,8 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.oritmalki.mymusicapp2.BasicApp;
 import com.oritmalki.mymusicapp2.R;
 import com.oritmalki.mymusicapp2.database.MeasureRepository;
+import com.oritmalki.mymusicapp2.firebase.AuthManager;
+import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
 import com.oritmalki.mymusicapp2.model.Beat;
 import com.oritmalki.mymusicapp2.model.Measure;
 import com.oritmalki.mymusicapp2.ui.mainscreen.EditFragment.OnFragmentInteractionListener;
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         counterView = getLayoutInflater().inflate(R.layout.counter_view, null);
         actionBar.setCustomView(counterView);
+
 
 
 
@@ -524,14 +529,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // todo: goto back activity from here
-
                 startActivity(SheetsActivity.getIntent(this));
                 finish();
                 return true;
+            case R.id.sign_out:
+                AuthManager.getFirebaseAuth().signOut();
+                startActivity(SignInActivity.getIntent(this));
+                finish();
+                return true;
+            case R.id.share_sheet:
+                FbDatabaseManager.getInstance();
 
             default:
                 return super.onOptionsItemSelected(item);
