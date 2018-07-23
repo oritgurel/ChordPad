@@ -44,8 +44,10 @@ import com.oritmalki.mymusicapp2.database.MeasureRepository;
 import com.oritmalki.mymusicapp2.firebase.AuthManager;
 import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
 import com.oritmalki.mymusicapp2.firebase.IFbDatabase;
+import com.oritmalki.mymusicapp2.firebase.ISheets;
 import com.oritmalki.mymusicapp2.model.Beat;
 import com.oritmalki.mymusicapp2.model.Measure;
+import com.oritmalki.mymusicapp2.model.Sheet;
 import com.oritmalki.mymusicapp2.ui.mainscreen.EditFragment.OnFragmentInteractionListener;
 import com.oritmalki.mymusicapp2.ui.mainscreen.MeasuresAdapter.MeasureHolder;
 import com.oritmalki.mymusicapp2.utils.StringQueueArray;
@@ -567,9 +569,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             @Override
             public void onSuccess(String message) {
                 //dialoge to insert email of another user (assuming that user exists. TODO if user does not exist he'll recieve invitation to get the app)
-                showShareDialog(measuresToShare);
             }
         });
+
+        showShareDialog(measuresToShare);
 
         //save sheet content (measures) to fb, and send push notification to other user with payload to add the sheet to his sharedSheet fragment.
     }
@@ -579,6 +582,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         shareDialog.setTitle("Share Your Chords");
         EditText et = new EditText(this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.setMargins(16, 16, 16, 16);
         et.setLayoutParams(lp);
         et.setHint("Enter other user's email");
         shareDialog.setView(et);
@@ -601,10 +605,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     public void onSuccess(String message) {
                         //TODO send push to other user
                         Toast.makeText(getApplicationContext(), "Successfully shared with " + message , Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
+                        //TODO SET THE DATA FOR SHARED FRAGMENT - READ FROM FB HERE AND ONSUCCESS SET THE DATA.
+
+
 
                     }
                 });
+
+                dialog.dismiss();
             }
         });
 

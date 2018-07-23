@@ -16,7 +16,9 @@ import com.oritmalki.mymusicapp2.model.Sheet;
 import com.oritmalki.mymusicapp2.model.TimeSignature;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SheetListViewModel extends AndroidViewModel {
 
@@ -83,9 +85,13 @@ public class SheetListViewModel extends AndroidViewModel {
 //        ((BasicApp) application).getMeasureRepository().deleteAllMeasures();
                 //save measures
                 ((BasicApp) application).getMeasureRepository().saveMeasures(defaultMeasureList);
+                String uid = AuthManager.getFirebaseAuth().getUid();
 
                 //save sheet to firebase
-                Sheet sheet = new Sheet(id, title, author, AuthManager.getFirebaseAuth().getUid());
+                Sheet sheet = new Sheet(id, title, author, uid);
+                Map<String, String> userAccess = new HashMap<>();
+                userAccess.put(uid, FbDatabaseManager.REF_OWNER);
+                sheet.setUserAccess(userAccess);
                 FbDatabaseManager.getInstance().saveSheetToFirebase(sheet, new IFbDatabase() {
                     @Override
                     public void onError(String error) {

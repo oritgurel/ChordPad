@@ -5,15 +5,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.oritmalki.mymusicapp2.R;
+import com.oritmalki.mymusicapp2.firebase.AuthManager;
+import com.oritmalki.mymusicapp2.firebase.FbDatabaseManager;
+import com.oritmalki.mymusicapp2.firebase.ISheets;
+import com.oritmalki.mymusicapp2.model.Sheet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SharedSheetsFragment extends android.support.v4.app.ListFragment {
 
-    private static List<String> sharedSheets;
+    private static List<Sheet> sharedSheets;
 
     public SharedSheetsFragment() {
 
@@ -23,7 +28,7 @@ public class SharedSheetsFragment extends android.support.v4.app.ListFragment {
         return new SharedSheetsFragment();
     }
 
-    public static void setData(List<String> sheets) {
+    public static void setData(List<Sheet> sheets) {
         if (sharedSheets == null) {
             sharedSheets = new ArrayList<>(sheets);
         }
@@ -51,13 +56,34 @@ public class SharedSheetsFragment extends android.support.v4.app.ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, sharedSheets);
-        if (sharedSheets != null) {
-            setListAdapter(adapter);
-        }
+
+        FbDatabaseManager.getInstance().fetchSharedSheets(AuthManager.getFirebaseAuth().getUid(), new ISheets() {
+            @Override
+            public void onSheetsRecieved(List<Sheet> sheets) {
+
+                SharedSheetsFragment.setData(sheets);
+
+                if (sheets == null) {
+                    return;
+                }
+                ArrayList<String> titles = new ArrayList<>();
+                for (Sheet sheet : sheets) {
+                    titles.add(sheet.getTitle());
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, sharedSheets);
+                setListAdapter(adapter);
+
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getActivity(), error, Toast.LENGTH_LONG).show();
+            }
+        });
 
 
     }
 
-
 }
+
+
